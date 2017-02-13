@@ -1,0 +1,10 @@
+# .gitignore for mcka_load_test
+
+### Python artifacts
+*.pyc
+
+### Editor and IDE artifacts
+.pycharm_helpers/
+*.log
+*.png
+.idea/
