@@ -46,10 +46,10 @@ class RegistrationPage(ArbiBase):
                     "name": "Test User",
                     "username": user_name,
                     "password": 'arbi',
-                    "level_of_education": "",
-                    "gender": "",
-                    "year_of_birth": "",
-                    "mailing_address": "",
+                    "level_of_education": "master",
+                    "gender": "m",
+                    "year_of_birth": "1999",
+                    "mailing_address": "abc def",
                     "goals": "",
                     "honor_code": "true"
         }

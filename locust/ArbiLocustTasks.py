@@ -46,7 +46,7 @@ class RegistrationTasks(TaskSet):
         )
 
     @task(1)
-    def visit_registration_page(self):
+    def registration(self):
         """
         Visit Registration page
         """
