@@ -4,6 +4,11 @@ Configurations shared across load tests.
 import os
 import uuid
 
+# HTTP authentication credentials
+BASIC_AUTH_USER = os.environ['BASIC_AUTH_USER']
+BASIC_AUTH_PASSWORD = os.environ['BASIC_AUTH_PASSWORD']
+BASIC_AUTH_CREDENTIALS = (BASIC_AUTH_USER, BASIC_AUTH_PASSWORD)
+
 # User credentials
 EXISTING_USER_EMAIL = os.environ['ARBISOFT_USER_EMAIL']
 EXISTING_USER_PASSWORD = 'edx'
