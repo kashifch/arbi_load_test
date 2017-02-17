@@ -52,8 +52,8 @@ class RegistrationTasks(TaskSet):
         """
         registration_page_cookies = \
             self.registration_page.visit_registration_page()
-        # registration_cookies = self.registration_page.register_new_user(
-        #     registration_page_cookies
-        # )
-        # self.registration_page.visit_survey_page(registration_cookies)
-        # self.registration_page.submit_survey(registration_cookies)
+        registration_cookies = self.registration_page.register_new_user(
+            registration_page_cookies
+        )
+        self.registration_page.visit_survey_page(registration_cookies)
+        self.registration_page.submit_survey(registration_cookies)
