@@ -20,5 +20,5 @@ class ArbisoftLocust(HttpLocust):
     well as which TaskSet class should define the user's behavior.
     """
     task_set = globals()[os.getenv('LOCUST_TASK_SET', 'ArbiTest')]
-    min_wait = 4000
-    max_wait = 15000
+    min_wait = 60000
+    max_wait = 90000

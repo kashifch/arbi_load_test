@@ -25,9 +25,9 @@ class LoggedInTasks(TaskSet):
         View the pages repeatedly
         """
         response = self.login_page.visit_login_page()
-        cookies = self.login_page.login_existing_user(response)
-        self.dahboard_page.visit_dashboard_page(cookies)
-        self.course_page.visit_course_main_page(cookies)
+        # cookies = self.login_page.login_existing_user(response)
+        # self.dahboard_page.visit_dashboard_page(cookies)
+        # self.course_page.visit_course_main_page(cookies)
 
 
 class RegistrationTasks(TaskSet):
