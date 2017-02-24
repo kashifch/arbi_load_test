@@ -21,7 +21,7 @@ class ArbiBase(object):
         """
         self.hostname = hostname
         self.client = client
-        self.client.auth = BASIC_AUTH_CREDENTIALS
+        # self.client.auth = BASIC_AUTH_CREDENTIALS
 
         self.default_headers = {
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
