@@ -1,6 +1,6 @@
 import os
 from locust import HttpLocust, TaskSet
-from ArbiLocustTasks import LoggedInTasks, RegistrationTasks
+from ArbiLocustTasks import LoginTasks, RegistrationTasks, CourseTasks, AllTasks, LogistrationTasks
 
 
 class ArbiTest(TaskSet):
@@ -8,8 +8,11 @@ class ArbiTest(TaskSet):
     Execute Load tests
     """
     tasks = {
-        LoggedInTasks: 1,
-        RegistrationTasks: 1
+        LoginTasks: 10,
+        RegistrationTasks: 1,
+        CourseTasks: 100,
+        AllTasks: 10,
+        LogistrationTasks: 1
     }
 
 
@@ -20,5 +23,5 @@ class ArbisoftLocust(HttpLocust):
     well as which TaskSet class should define the user's behavior.
     """
     task_set = globals()[os.getenv('LOCUST_TASK_SET', 'ArbiTest')]
-    min_wait = 90000
-    max_wait = 120000
+    min_wait = 30000
+    max_wait = 90000

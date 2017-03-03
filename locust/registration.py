@@ -1,10 +1,12 @@
 import uuid
+import collections
 from arbi_base import ArbiBase
 from config import (
     REGISTRATION_PAGE_URL,
     REGISTER_URL,
     SURVEY_PAGE_URL,
-    SURVEY_PARAMS
+    SURVEY_PARAMS,
+    USER_PASSWORD
 )
 
 
@@ -29,23 +31,23 @@ class RegistrationPage(ArbiBase):
             REGISTRATION_PAGE_URL,
             url_group_name="registration_page"
         )
-        c_list = ["csrftoken"]
-        return self.cookies_dict(response, c_list )
+        return response.cookies
 
-    def register_new_user(self, registration_page_cookies):
+    def register_new_user(self, cookies):
         """
         Register new user
-        :param registration_page_cookies:
+        :param cookies:
         :return: cookies
         """
+        RegistrationInfo = collections.namedtuple('RegistrationInfo', 'session user')
         url = REGISTER_URL
         user_name = str(uuid.uuid4().node)
         email = user_name + "@example.com"
-        REGISTRATION_PARAMS = {
+        registration_params = {
                     "email": email,
                     "name": "Test User",
                     "username": user_name,
-                    "password": 'arbi',
+                    "password": USER_PASSWORD,
                     "level_of_education": "master",
                     "gender": "m",
                     "year_of_birth": "1999",
@@ -53,15 +55,14 @@ class RegistrationPage(ArbiBase):
                     "goals": "",
                     "honor_code": "true"
         }
-        referer_url = self.hostname + "/register?next=%2Fdashboard"
-        self.default_headers["Referer"] = referer_url
+        self.default_headers["Referer"] = self.hostname + "/register?next=%2Fdashboard"
+        self.default_headers["X-Requested-With"] = "XMLHttpRequest"
         response = self._post(
             url,
-            REGISTRATION_PARAMS,
-            registration_page_cookies
+            registration_params,
+            cookies
         )
-        c_list = ["csrftoken", "sessionid", "edx-user-info", "edxloggedin"]
-        return self.cookies_dict(response, c_list )
+        return RegistrationInfo(session=response.cookies, user=email)
 
     def visit_survey_page(self, cookies):
         """
@@ -76,7 +77,13 @@ class RegistrationPage(ArbiBase):
         )
 
     def submit_survey(self, cookies):
+        """
+        Submit survey
+        :param cookies:
+        :return: cookies
+        """
         referer_url = self.hostname + SURVEY_PAGE_URL
         self.default_headers["Referer"] = referer_url
         SURVEY_PARAMS["csrfmiddlewaretoken"] = cookies["csrftoken"]
-        self._post(SURVEY_PAGE_URL, params=SURVEY_PARAMS, cookie=cookies)
+        response = self._post(SURVEY_PAGE_URL, params=SURVEY_PARAMS, cookie=cookies)
+        return response.cookies

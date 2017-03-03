@@ -21,7 +21,7 @@ class DashboardPage(ArbiBase):
         """
         self._get(
             DASHBOARD_PAGE_URL,
-            response_string='Dashboard"',
+            response_string='Dashboard',
             url_group_name="dashboard_page",
             cookie=cookies
         )

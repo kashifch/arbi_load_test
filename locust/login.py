@@ -3,7 +3,7 @@ from config import (
     LOGIN_PAGE_URL,
     LOGIN_URL,
     EXISTING_USER_EMAIL,
-    EXISTING_USER_PASSWORD
+    USER_PASSWORD
 )
 
 
@@ -25,24 +25,41 @@ class LoginPage(ArbiBase):
         :return:
         """
         response = self._get(LOGIN_PAGE_URL, url_group_name="login_page")
-        return response.cookies['csrftoken']
+        return response.cookies
 
-    def login_existing_user(self, login_page_csrf):
+    def login_existing_user(self, cookies):
         """
         Login Existing user
-        :param login_page_csrf:
+        :param cookies:
         :return: cookies
         """
-        url = LOGIN_URL
-        cookie = {'csrftoken': login_page_csrf}
         referer_url = self.hostname + LOGIN_PAGE_URL
         self.default_headers["Referer"] = referer_url
-        self.default_headers["X-CSRFToken"] = login_page_csrf
+        self.default_headers["X-CSRFToken"] = cookies['csrftoken']
+        self.default_headers["X-Requested-With"] = "XMLHttpRequest"
         params = {
             "email": EXISTING_USER_EMAIL,
-            "password": EXISTING_USER_PASSWORD,
+            "password": USER_PASSWORD,
             "remember": "false"
         }
-        response = self._post(url, params, cookie)
-        c_list = ["csrftoken", "sessionid", "edx-user-info", "edxloggedin"]
-        return self.cookies_dict(response, c_list )
+        response = self._post(LOGIN_URL, params, cookies)
+        return response.cookies
+
+    def login_new_user(self, cookies, user_email):
+        """
+        Login New user
+        :param cookies:
+        :param user_email:
+        :return: cookies
+        """
+        referer_url = self.hostname + LOGIN_PAGE_URL
+        self.default_headers["Referer"] = referer_url
+        self.default_headers["X-CSRFToken"] = cookies['csrftoken']
+        self.default_headers["X-Requested-With"] = "XMLHttpRequest"
+        params = {
+            "email": user_email,
+            "password": USER_PASSWORD,
+            "remember": "false"
+        }
+        response = self._post(LOGIN_URL, params, cookies)
+        return response.cookies

@@ -1,5 +1,5 @@
 from arbi_base import ArbiBase
-from config import COURSE_MAIN_PAGE_URL
+from config import COURSE_MAIN_PAGE_URL, EXAM_MAIN_PAGE_URL, QUESTION_URL, SUBMIT_ANSWER_1_URL, START_EXAM_URL
 
 
 class CoursePage(ArbiBase):
@@ -23,6 +23,62 @@ class CoursePage(ArbiBase):
             COURSE_MAIN_PAGE_URL,
             response_string="Courseware",
             url_group_name="course_main_page",
+            cookie=cookies
+        )
+
+    def start_exam(self, cookies):
+        self.default_headers["Referer"] = self.hostname + EXAM_MAIN_PAGE_URL
+        self.default_headers["X-CSRFToken"] = cookies['csrftoken']
+        self.default_headers["X-Requested-With"] = "XMLHttpRequest"
+        params = {
+            "exam_id": "2",
+            "start_exam": "true"
+        }
+        self._post(
+            START_EXAM_URL,
+            params = params,
+            cookie=cookies
+        )
+
+
+    def visit_exam_main_page(self, cookies):
+        """
+        Visit Exam main page
+        :param cookies:
+        """
+        self._get(
+            EXAM_MAIN_PAGE_URL,
+            response_string="Timed Exam",
+            url_group_name="exam_main_page",
+            cookie=cookies
+        )
+
+    def visit_random_question(self, cookies):
+        """
+        Visit question  page
+        :param cookies:
+        """
+        self._get(
+            QUESTION_URL,
+            url_group_name="question_2",
+            cookie=cookies
+        )
+
+    def submit_answer_1(self, cookies):
+        """
+        Visit question  page
+        :param cookies:
+        """
+
+        self.default_headers["Referer"] = self.hostname + EXAM_MAIN_PAGE_URL
+        self.default_headers["X-CSRFToken"] = cookies['csrftoken']
+        self.default_headers["X-Requested-With"] = "XMLHttpRequest"
+        params = {
+            "input_119183d10946cba26e64_2_1": "choice_2"
+        }
+        self._post(
+            SUBMIT_ANSWER_1_URL,
+            params = params,
             cookie=cookies
         )
 

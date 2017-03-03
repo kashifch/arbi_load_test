@@ -28,18 +28,6 @@ class ArbiBase(object):
             'Connection': 'keep-alive',
         }
 
-    def cookies_dict(self, response, cookies_list):
-        """
-        Create a cookie dictionary
-        :param response:
-        :param cookies_list:
-        :return:
-        """
-        c_dict = {}
-        for cookie in cookies_list:
-            c_dict[cookie] = response.cookies[cookie]
-        return c_dict
-
     def _check_response(self, response):
         """
         Check whether a response was successful.
@@ -64,9 +52,12 @@ class ArbiBase(object):
                 name=url_group_name,
                 cookies=cookie
         ) as response:
-            if response_string:
-                if response_string not in response.content:
-                    response.failure("Not on the correct page")
+            if response.status_code != 200:
+                    response.failure("API request failed with following error code: " + str(response.status_code))
+            else:
+                if response_string:
+                    if response_string not in response.content:
+                        response.failure("Not on the correct page")
         return response
 
     def _post(self, url, params, cookie=None):
