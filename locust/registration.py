@@ -42,7 +42,7 @@ class RegistrationPage(ArbiBase):
         RegistrationInfo = collections.namedtuple('RegistrationInfo', 'session user')
         url = REGISTER_URL
         user_name = str(uuid.uuid4().node)
-        email = 'kch786+' + user_name + "@gmail.com"
+        email = user_name + "@example.com"
         registration_params = {
                     "email": email,
                     "name": "Test User",
