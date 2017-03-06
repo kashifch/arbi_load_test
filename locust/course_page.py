@@ -26,6 +26,7 @@ class CoursePage(ArbiBase):
             cookie=cookies
         )
 
+
     def start_exam(self, cookies):
         self.default_headers["Referer"] = self.hostname + EXAM_MAIN_PAGE_URL
         self.default_headers["X-CSRFToken"] = cookies['csrftoken']
@@ -74,7 +75,7 @@ class CoursePage(ArbiBase):
         self.default_headers["X-CSRFToken"] = cookies['csrftoken']
         self.default_headers["X-Requested-With"] = "XMLHttpRequest"
         params = {
-            "input_119183d10946cba26e64_2_1": "choice_2"
+            "input_906f1d62bab5b1bcf7e7_2_1": "choice_2"
         }
         self._post(
             SUBMIT_ANSWER_1_URL,

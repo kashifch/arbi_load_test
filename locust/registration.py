@@ -42,7 +42,7 @@ class RegistrationPage(ArbiBase):
         RegistrationInfo = collections.namedtuple('RegistrationInfo', 'session user')
         url = REGISTER_URL
         user_name = str(uuid.uuid4().node)
-        email = user_name + "@example.com"
+        email = 'kch786+' + user_name + "@gmail.com"
         registration_params = {
                     "email": email,
                     "name": "Test User",
@@ -87,3 +87,16 @@ class RegistrationPage(ArbiBase):
         SURVEY_PARAMS["csrfmiddlewaretoken"] = cookies["csrftoken"]
         response = self._post(SURVEY_PAGE_URL, params=SURVEY_PARAMS, cookie=cookies)
         return response.cookies
+
+    def register(self):
+        registration_page_cookies = \
+            self.visit_registration_page()
+
+        registration_info = self.register_new_user(
+            registration_page_cookies
+        )
+        user_session = registration_info.session
+        user_email = registration_info.user
+        self.visit_survey_page(user_session)
+        self.submit_survey(user_session)
+        return user_session

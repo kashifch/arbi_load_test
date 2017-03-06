@@ -23,8 +23,8 @@ DASHBOARD_PAGE_URL = u"/dashboard"
 COURSE_MAIN_PAGE_URL = u"/courses/course-v1:Arbisoft+Hiring_1+2017_1/courseware/b9c7266533ea42cba4ea23d8f8d2144f/ccf2696e7f6a463b8ed438a3ccb49fa6/"
 START_EXAM_URL = u"/api/edx_proctoring/v1/proctored_exam/attempt"
 EXAM_MAIN_PAGE_URL = u"/courses/course-v1:Arbisoft+Hiring_1+2017_1/courseware/b9c7266533ea42cba4ea23d8f8d2144f/9dd501863ddc42f08e38087dc8a654b3/"
-QUESTION_URL = u"/asset-v1:Arbisoft+Hiring_1+2017_1+type@asset+block@Screen_Shot_2017-02-04_at_12.49.15_AM.png"
-SUBMIT_ANSWER_1_URL = u"/courses/course-v1:Arbisoft+Hiring_1+2017_1/xblock/block-v1:Arbisoft+Hiring_1+2017_1+type@problem+block@4934975954cc027b5c59/handler/xmodule_handler/problem_check"
+QUESTION_URL = u"/asset-v1:Arbisoft+Hiring_1+2017_1+type@asset+block@Screen_Shot_2017-02-15_at_9.19.25_PM.png"
+SUBMIT_ANSWER_1_URL = u"/courses/course-v1:Arbisoft+Hiring_1+2017_1/xblock/block-v1:Arbisoft+Hiring_1+2017_1+type@problem+block@906f1d62bab5b1bcf7e7/handler/xmodule_handler/problem_check"
 
 # Parameters
 SURVEY_PARAMS = {

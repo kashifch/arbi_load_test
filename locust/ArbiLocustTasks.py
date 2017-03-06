@@ -34,21 +34,36 @@ class AllTasks(TaskSet):
         registration_info = self.registration_page.register_new_user(
             registration_page_cookies
         )
-        self.user_session = registration_info.session
-        self.registration_page.visit_survey_page(self.user_session)
-        self.registration_page.submit_survey(self.user_session)
+        registration_cookies = registration_info.session
+        user_email = registration_info.user
+        self.registration_page.visit_survey_page(registration_cookies)
+        self.registration_page.submit_survey(registration_cookies)
+        response = self.login_page.visit_login_page()
+        self.user_session = self.login_page.login_new_user(response, user_email)
+        # self.dahboard_page.visit_dashboard_page(self.user_session)
+        # self.course_page.visit_course_main_page(self.user_session)
+        # # self.course_page.start_exam(self.user_session)
+        # self.course_page.visit_exam_main_page(self.user_session)
+
+    @task(10)
+    def dashboard_page(self):
         self.dahboard_page.visit_dashboard_page(self.user_session)
-        self.course_page.visit_course_main_page(self.user_session)
-        self.course_page.start_exam(self.user_session)
-        self.course_page.visit_exam_main_page(self.user_session)
 
-    @task(8)
-    def question_page(self):
-        self.course_page.visit_random_question(self.user_session)
+    # @task(20)
+    # def course_main_page(self):
+    #     self.course_page.visit_course_main_page(self.user_session)
+    #
+    # @task(8)
+    # def exam_main_page(self):
+    #     self.course_page.visit_exam_main_page(self.user_session)
 
-    @task(9)
-    def answer(self):
-        self.course_page.submit_answer_1(self.user_session)
+    # @task(8)
+    # def question_page(self):
+    #     self.course_page.visit_random_question(self.user_session)
+    #
+    # @task(9)
+    # def answer(self):
+    #     self.course_page.submit_answer_1(self.user_session)
 
 
 
