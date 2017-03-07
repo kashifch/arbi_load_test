@@ -3,6 +3,7 @@ from login import LoginPage
 from dashboard_page import DashboardPage
 from course_page import CoursePage
 from registration import RegistrationPage
+from config import USER_EMAILS, PROBLEM_DATA
 
 
 class AllTasks(TaskSet):
@@ -107,28 +108,30 @@ class CourseTasks(TaskSet):
         self.course_page = CoursePage(self.locust.host, self.client)
 
     def on_start(self):
+        user_email = USER_EMAILS.pop()
         response = self.login_page.visit_login_page()
-        self.login_cookies = self.login_page.login_existing_user(response)
+        self.login_cookies = self.login_page.login_new_user(response, user_email)
 
-    @task(1)
+    @task(10)
     def dashboard_page(self):
         self.dahboard_page.visit_dashboard_page(self.login_cookies)
 
-    @task(1)
+    @task(30)
     def course_main_page(self):
         self.course_page.visit_course_main_page(self.login_cookies)
 
-    @task(8)
+    @task(50)
     def exam_main_page(self):
         self.course_page.visit_exam_main_page(self.login_cookies)
 
-    @task(8)
-    def question_page(self):
-        self.course_page.visit_random_question(self.login_cookies)
+    # @task(8)
+    # def question_page(self):
+    #     self.course_page.visit_random_question(self.login_cookies)
 
-    @task(9)
-    def answer(self):
-        self.course_page.submit_answer_1(self.login_cookies)
+    # @task(9)
+    # def answer(self):
+    #     for key in PROBLEM_DATA:
+    #         self.course_page.submit_answer_1(self.login_cookies, PROBLEM_DATA[key]['block_id'], PROBLEM_DATA[key]['input_id'], PROBLEM_DATA[key]['choice_id'])
 
 
 class RegistrationTasks(TaskSet):

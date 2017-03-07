@@ -65,7 +65,7 @@ class CoursePage(ArbiBase):
             cookie=cookies
         )
 
-    def submit_answer_1(self, cookies):
+    def submit_answer_1(self, cookies, block_id, input_id, choice_id):
         """
         Visit question  page
         :param cookies:
@@ -75,10 +75,10 @@ class CoursePage(ArbiBase):
         self.default_headers["X-CSRFToken"] = cookies['csrftoken']
         self.default_headers["X-Requested-With"] = "XMLHttpRequest"
         params = {
-            "input_906f1d62bab5b1bcf7e7_2_1": "choice_2"
+            input_id: choice_id
         }
         self._post(
-            SUBMIT_ANSWER_1_URL,
+            SUBMIT_ANSWER_1_URL.format(block_id),
             params = params,
             cookie=cookies
         )

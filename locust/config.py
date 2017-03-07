@@ -2,7 +2,7 @@
 Configurations shared across load tests.
 """
 import os
-import uuid
+import csv
 
 # HTTP authentication credentials
 BASIC_AUTH_USER = os.environ['BASIC_AUTH_USER']
@@ -10,7 +10,7 @@ BASIC_AUTH_PASSWORD = os.environ['BASIC_AUTH_PASSWORD']
 BASIC_AUTH_CREDENTIALS = (BASIC_AUTH_USER, BASIC_AUTH_PASSWORD)
 
 # User credentials
-EXISTING_USER_EMAIL = os.environ['ARBISOFT_USER_EMAIL']
+EXISTING_USER_EMAIL = os.getenv('ARBISOFT_USER_EMAIL', 'kashif.chaudhry@arbisoft.com')
 USER_PASSWORD = 'edx'
 
 # URLS
@@ -24,7 +24,7 @@ COURSE_MAIN_PAGE_URL = u"/courses/course-v1:Arbisoft+Hiring_1+2017_1/courseware/
 START_EXAM_URL = u"/api/edx_proctoring/v1/proctored_exam/attempt"
 EXAM_MAIN_PAGE_URL = u"/courses/course-v1:Arbisoft+Hiring_1+2017_1/courseware/b9c7266533ea42cba4ea23d8f8d2144f/9dd501863ddc42f08e38087dc8a654b3/"
 QUESTION_URL = u"/asset-v1:Arbisoft+Hiring_1+2017_1+type@asset+block@Screen_Shot_2017-02-15_at_9.19.25_PM.png"
-SUBMIT_ANSWER_1_URL = u"/courses/course-v1:Arbisoft+Hiring_1+2017_1/xblock/block-v1:Arbisoft+Hiring_1+2017_1+type@problem+block@906f1d62bab5b1bcf7e7/handler/xmodule_handler/problem_check"
+SUBMIT_ANSWER_1_URL = u"/courses/course-v1:Arbisoft+Hiring_1+2017_1/xblock/block-v1:Arbisoft+Hiring_1+2017_1+type@problem+block@{}/handler/xmodule_handler/problem_check"
 
 # Parameters
 SURVEY_PARAMS = {
@@ -88,4 +88,42 @@ SURVEY_PARAMS = {
 "reference-1-position":"2",
 "reference-1-phone_number":"0222345667",
 "reference-1-id":""
+}
+
+
+def fetch_emails():
+    with open('users.csv', 'r') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        return list(csv_reader)
+
+USER_EMAILS = fetch_emails()
+
+PROBLEM_DATA = {
+    'problem_1': {
+        'block_id': '906f1d62bab5b1bcf7e7',
+        'input_id': 'input_906f1d62bab5b1bcf7e7_2_1',
+        'choice_id': 'choice_2'
+    },
+    'problem_2': {
+        'block_id': 'd6c410d4e850e223e3fc',
+        'input_id': 'input_d6c410d4e850e223e3fc_2_1',
+        'choice_id': 'choice_3'
+    },
+    'problem_3': {
+        'block_id': '272144c43564a4069e81',
+        'input_id': 'input_272144c43564a4069e81_2_1',
+        'choice_id': 'choice_4'
+    },
+    'problem_4': {
+        'block_id': '906f1d62bab5b1bcf7e7',
+        'input_id': 'input_906f1d62bab5b1bcf7e7_2_1',
+        'choice_id': 'choice_2'
+    },
+    'problem_5': {
+        'block_id': '02558815761b2a959dcd',
+        'input_id': 'input_02558815761b2a959dcd_2_1',
+        'choice_id': 'choice_4'
+    },
+
+
 }
