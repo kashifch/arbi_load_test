@@ -112,7 +112,7 @@ class CourseTasks(TaskSet):
         user_email = USER_EMAILS.pop()
         response = self.login_page.visit_login_page()
         self.login_cookies = self.login_page.login_new_user(response, user_email)
-        self.course_page.start_exam(self.login_cookies)
+        # self.course_page.start_exam(self.login_cookies)
 
     @task(10)
     def dashboard_page(self):
