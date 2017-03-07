@@ -4,7 +4,7 @@ from login import LoginPage
 from dashboard_page import DashboardPage
 from course_page import CoursePage
 from registration import RegistrationPage
-from config import USER_EMAILS, PROBLEM_DATA
+from config import USER_EMAILS, PROBLEM_DATA, QUESTIONS_ID
 
 
 class AllTasks(TaskSet):
@@ -126,9 +126,10 @@ class CourseTasks(TaskSet):
     def exam_main_page(self):
         self.course_page.visit_exam_main_page(self.login_cookies)
 
-    # @task(8)
-    # def question_page(self):
-    #     self.course_page.visit_random_question(self.login_cookies)
+    @task(8)
+    def question_page(self):
+        for q_id in QUESTIONS_ID:
+            self.course_page.visit_random_question(self.login_cookies, q_id)
 
     @task(100)
     def answer(self):

@@ -54,14 +54,14 @@ class CoursePage(ArbiBase):
             cookie=cookies
         )
 
-    def visit_random_question(self, cookies):
+    def visit_random_question(self, cookies, question_id):
         """
         Visit question  page
         :param cookies:
         """
         self._get(
-            QUESTION_URL,
-            url_group_name="question_2",
+            QUESTION_URL.format(question_id),
+            url_group_name=question_id,
             cookie=cookies
         )
 
