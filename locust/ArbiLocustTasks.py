@@ -131,7 +131,7 @@ class CourseTasks(TaskSet):
 
     @task(100)
     def answer(self):
-        self.course_page.start_exam(self.login_cookies)
+        # self.course_page.start_exam(self.login_cookies)
         for key in PROBLEM_DATA:
             self.course_page.submit_answer_1(self.login_cookies, PROBLEM_DATA[key]['block_id'], PROBLEM_DATA[key]['input_id'], PROBLEM_DATA[key]['choice_id'])
 
