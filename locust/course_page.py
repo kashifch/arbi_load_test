@@ -32,7 +32,7 @@ class CoursePage(ArbiBase):
         self.default_headers["X-CSRFToken"] = cookies['csrftoken']
         self.default_headers["X-Requested-With"] = "XMLHttpRequest"
         params = {
-            "exam_id": "2",
+            "exam_id": "1",
             "start_exam": "true"
         }
         self._post(
