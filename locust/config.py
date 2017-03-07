@@ -13,6 +13,8 @@ BASIC_AUTH_CREDENTIALS = (BASIC_AUTH_USER, BASIC_AUTH_PASSWORD)
 EXISTING_USER_EMAIL = os.getenv('ARBISOFT_USER_EMAIL', 'kashif.chaudhry@arbisoft.com')
 USER_PASSWORD = 'edx'
 
+USER_FILE = os.environ['USER_FILE']
+
 # URLS
 LOGIN_PAGE_URL = u"/login"
 REGISTRATION_PAGE_URL = u"/register"
@@ -92,7 +94,8 @@ SURVEY_PARAMS = {
 
 
 def fetch_emails():
-    with open('users.csv', 'r') as csv_file:
+    file_name = USER_FILE + '.csv'
+    with open(file_name, 'r') as csv_file:
         csv_reader = csv.reader(csv_file)
         return list(csv_reader)
 
