@@ -1,3 +1,4 @@
+import random
 from locust import task, TaskSet
 from login import LoginPage
 from dashboard_page import DashboardPage
@@ -108,6 +109,7 @@ class CourseTasks(TaskSet):
         self.course_page = CoursePage(self.locust.host, self.client)
 
     def on_start(self):
+        random.shuffle(USER_EMAILS)
         user_email = USER_EMAILS.pop()
         response = self.login_page.visit_login_page()
         self.login_cookies = self.login_page.login_new_user(response, user_email)
