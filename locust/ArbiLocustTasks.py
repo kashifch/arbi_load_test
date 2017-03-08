@@ -114,15 +114,15 @@ class CourseTasks(TaskSet):
         self.login_cookies = self.login_page.login_new_user(response, user_email)
         self.course_page.start_exam(self.login_cookies)
 
-    @task(10)
+    @task(1)
     def dashboard_page(self):
         self.dahboard_page.visit_dashboard_page(self.login_cookies)
 
-    @task(30)
+    @task(1)
     def course_main_page(self):
         self.course_page.visit_course_main_page(self.login_cookies)
 
-    @task(50)
+    @task(2)
     def exam_main_page(self):
         self.course_page.visit_exam_main_page(self.login_cookies)
 
@@ -131,7 +131,7 @@ class CourseTasks(TaskSet):
         for q_id in QUESTIONS_ID:
             self.course_page.visit_random_question(self.login_cookies, q_id)
 
-    @task(100)
+    @task(20)
     def answer(self):
         for key in PROBLEM_DATA:
             self.course_page.submit_answer_1(self.login_cookies, PROBLEM_DATA[key]['block_id'], PROBLEM_DATA[key]['input_id'], PROBLEM_DATA[key]['choice_id'])
