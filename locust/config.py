@@ -102,11 +102,6 @@ def fetch_emails():
 USER_EMAILS = fetch_emails()
 
 PROBLEM_DATA = {
-    'problem_1': {
-        'block_id': '906f1d62bab5b1bcf7e7',
-        'input_id': 'input_906f1d62bab5b1bcf7e7_2_1',
-        'choice_id': 'choice_2'
-    },
     'problem_2': {
         'block_id': 'd6c410d4e850e223e3fc',
         'input_id': 'input_d6c410d4e850e223e3fc_2_1',
