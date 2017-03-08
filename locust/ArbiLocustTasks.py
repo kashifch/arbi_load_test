@@ -112,22 +112,19 @@ class CourseTasks(TaskSet):
         user_email = USER_EMAILS.pop()
         response = self.login_page.visit_login_page()
         self.login_cookies = self.login_page.login_new_user(response, user_email)
-        self.dahboard_page.visit_dashboard_page(self.login_cookies)
-        self.course_page.visit_course_main_page(self.login_cookies)
         self.course_page.start_exam(self.login_cookies)
-        self.course_page.visit_exam_main_page(self.login_cookies)
 
-    # @task(1)
-    # def dashboard_page(self):
-    #     self.dahboard_page.visit_dashboard_page(self.login_cookies)
-    #
-    # @task(1)
-    # def course_main_page(self):
-    #     self.course_page.visit_course_main_page(self.login_cookies)
-    #
-    # @task(2)
-    # def exam_main_page(self):
-    #     self.course_page.visit_exam_main_page(self.login_cookies)
+    @task(1)
+    def dashboard_page(self):
+        self.dahboard_page.visit_dashboard_page(self.login_cookies)
+
+    @task(1)
+    def course_main_page(self):
+        self.course_page.visit_course_main_page(self.login_cookies)
+
+    @task(1)
+    def exam_main_page(self):
+        self.course_page.visit_exam_main_page(self.login_cookies)
 
     @task(8)
     def question_page(self):
