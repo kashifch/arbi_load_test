@@ -68,8 +68,6 @@ class AllTasks(TaskSet):
     #     self.course_page.submit_answer_1(self.user_session)
 
 
-
-
 class LoginTasks(TaskSet):
     """
     User scripts that exercise the viewing of course material pages
@@ -82,16 +80,17 @@ class LoginTasks(TaskSet):
         super(LoginTasks, self).__init__(*args, **kwargs)
         self.login_page = LoginPage(self.locust.host, self.client)
         self.dahboard_page = DashboardPage(self.locust.host, self.client)
-        self.course_page = CoursePage(self.locust.host, self.client)
+
+    def on_start(self):
+        self.login_page.visit_login_page()
+        self.login_page.login_existing_user()
 
     @task(1)
     def login(self):
         """
         View the pages repeatedly
         """
-        response = self.login_page.visit_login_page()
-        login_cookies = self.login_page.login_existing_user(response)
-        self.dahboard_page.visit_dashboard_page(login_cookies)
+        self.dahboard_page.visit_dashboard_page()
 
 
 class CourseTasks(TaskSet):
@@ -110,31 +109,31 @@ class CourseTasks(TaskSet):
 
     def on_start(self):
         user_email = USER_EMAILS.pop()
-        response = self.login_page.visit_login_page()
-        self.login_cookies = self.login_page.login_new_user(response, user_email)
-        self.course_page.start_exam(self.login_cookies)
+        self.login_page.visit_login_page()
+        self.login_page.login_new_user(user_email)
+        self.course_page.start_exam()
 
     @task(1)
     def dashboard_page(self):
-        self.dahboard_page.visit_dashboard_page(self.login_cookies)
+        self.dahboard_page.visit_dashboard_page()
 
     @task(1)
     def course_main_page(self):
-        self.course_page.visit_course_main_page(self.login_cookies)
+        self.course_page.visit_course_main_page()
 
     @task(1)
     def exam_main_page(self):
-        self.course_page.visit_exam_main_page(self.login_cookies)
+        self.course_page.visit_exam_main_page()
 
     @task(8)
     def question_page(self):
         for q_id in QUESTIONS_ID:
-            self.course_page.visit_random_question(self.login_cookies, q_id)
+            self.course_page.visit_random_question(q_id)
 
     @task(20)
     def answer(self):
         for key in PROBLEM_DATA:
-            self.course_page.submit_answer_1(self.login_cookies, PROBLEM_DATA[key]['block_id'], PROBLEM_DATA[key]['input_id'], PROBLEM_DATA[key]['choice_id'])
+            self.course_page.submit_answer_1(PROBLEM_DATA[key]['block_id'], PROBLEM_DATA[key]['input_id'], PROBLEM_DATA[key]['choice_id'])
 
 
 class RegistrationTasks(TaskSet):

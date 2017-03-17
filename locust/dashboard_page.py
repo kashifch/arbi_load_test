@@ -14,7 +14,7 @@ class DashboardPage(ArbiBase):
         """
         super(DashboardPage, self).__init__(*args, **kwargs)
 
-    def visit_dashboard_page(self, cookies):
+    def visit_dashboard_page(self):
         """
         Visit Dashboard
         :param cookies:
@@ -22,7 +22,6 @@ class DashboardPage(ArbiBase):
         self._get(
             DASHBOARD_PAGE_URL,
             response_string='Dashboard',
-            url_group_name="dashboard_page",
-            cookie=cookies
+            url_group_name="dashboard_page"
         )
 
