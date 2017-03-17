@@ -58,7 +58,6 @@ class ArbiBase(object):
                 if response_string:
                     if response_string not in response.content:
                         response.failure("Not on the correct page")
-                        print(response.content)
         return response
 
     def _post(self, url, params, cookie=None):
