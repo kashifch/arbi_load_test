@@ -17,7 +17,6 @@ class DashboardPage(ArbiBase):
     def visit_dashboard_page(self):
         """
         Visit Dashboard
-        :param cookies:
         """
         self._get(
             DASHBOARD_PAGE_URL,

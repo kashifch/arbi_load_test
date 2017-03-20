@@ -62,7 +62,6 @@ class CoursePage(ArbiBase):
         :param block_id:
         :param input_id:
         :param choice_id:
-        :return:
         """
         self.default_headers["Referer"] = self.hostname + EXAM_MAIN_PAGE_URL
         self.default_headers["X-CSRFToken"] = self.client.cookies['csrftoken']

@@ -27,24 +27,16 @@ class RegistrationPage(ArbiBase):
         Visit Registration page
         :return: cookies
         """
-        response = self._get(
-            REGISTRATION_PAGE_URL,
-            url_group_name="registration_page"
-        )
-        return response.cookies
+        self._get(REGISTRATION_PAGE_URL, url_group_name="registration_page")
 
-    def register_new_user(self, cookies):
+    def register_new_user(self):
         """
         Register new user
-        :param cookies:
-        :return: cookies
         """
-        RegistrationInfo = collections.namedtuple('RegistrationInfo', 'session user')
-        url = REGISTER_URL
         user_name = str(uuid.uuid4().node)
-        email = 'kch786+' + user_name + "@gmail.com"
+        user_email = user_name + "exqmple.com"
         registration_params = {
-                    "email": email,
+                    "email": user_email,
                     "name": "Test User",
                     "username": user_name,
                     "password": USER_PASSWORD,
@@ -57,46 +49,24 @@ class RegistrationPage(ArbiBase):
         }
         self.default_headers["Referer"] = self.hostname + "/register?next=%2Fdashboard"
         self.default_headers["X-Requested-With"] = "XMLHttpRequest"
-        response = self._post(
-            url,
-            registration_params,
-            cookies
-        )
-        return RegistrationInfo(session=response.cookies, user=email)
+        self._post(REGISTER_URL, registration_params)
+        return user_email
 
-    def visit_survey_page(self, cookies):
+    def visit_survey_page(self):
         """
         Visit survey page
-        :param cookies:
         """
         self._get(
             SURVEY_PAGE_URL,
             response_string="Arbisoft Hiring",
-            url_group_name="survey_page",
-            cookie=cookies
+            url_group_name="survey_page"
         )
 
-    def submit_survey(self, cookies):
+    def submit_survey(self):
         """
         Submit survey
-        :param cookies:
-        :return: cookies
         """
         referer_url = self.hostname + SURVEY_PAGE_URL
         self.default_headers["Referer"] = referer_url
-        SURVEY_PARAMS["csrfmiddlewaretoken"] = cookies["csrftoken"]
-        response = self._post(SURVEY_PAGE_URL, params=SURVEY_PARAMS, cookie=cookies)
-        return response.cookies
-
-    def register(self):
-        registration_page_cookies = \
-            self.visit_registration_page()
-
-        registration_info = self.register_new_user(
-            registration_page_cookies
-        )
-        user_session = registration_info.session
-        user_email = registration_info.user
-        self.visit_survey_page(user_session)
-        self.submit_survey(user_session)
-        return user_session
+        SURVEY_PARAMS["csrfmiddlewaretoken"] = self.client.cookies["csrftoken"]
+        response = self._post(SURVEY_PAGE_URL, params=SURVEY_PARAMS)

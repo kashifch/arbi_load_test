@@ -7,70 +7,9 @@ from registration import RegistrationPage
 from config import USER_EMAILS, PROBLEM_DATA, QUESTIONS_ID
 
 
-class AllTasks(TaskSet):
-    """
-    User scripts that test complete cycle
-    """
-
-    def __init__(self, *args, **kwargs):
-        """
-        Initialize the Task set.
-        """
-        super(AllTasks, self).__init__(*args, **kwargs)
-        self.registration_page = RegistrationPage(
-            self.locust.host,
-            self.client
-        )
-        self.login_page = LoginPage(self.locust.host, self.client)
-        self.dahboard_page = DashboardPage(self.locust.host, self.client)
-        self.course_page = CoursePage(self.locust.host, self.client)
-        self.user_session = None
-
-    def on_start(self):
-        """
-        View the pages repeatedly
-        """
-        registration_page_cookies = \
-            self.registration_page.visit_registration_page()
-
-        registration_info = self.registration_page.register_new_user(
-            registration_page_cookies
-        )
-        self.user_session = registration_info.session
-        # user_email = registration_info.user
-        self.registration_page.visit_survey_page(self.user_session)
-        self.registration_page.submit_survey(self.user_session)
-        # response = self.login_page.visit_login_page()
-        # self.user_session = self.login_page.login_new_user(response, user_email)
-        # self.dahboard_page.visit_dashboard_page(self.user_session)
-        # self.course_page.visit_course_main_page(self.user_session)
-        # # self.course_page.start_exam(self.user_session)
-        # self.course_page.visit_exam_main_page(self.user_session)
-
-    @task(10)
-    def dashboard_page(self):
-        self.dahboard_page.visit_dashboard_page(self.user_session)
-
-    # @task(20)
-    # def course_main_page(self):
-    #     self.course_page.visit_course_main_page(self.user_session)
-    #
-    # @task(8)
-    # def exam_main_page(self):
-    #     self.course_page.visit_exam_main_page(self.user_session)
-
-    # @task(8)
-    # def question_page(self):
-    #     self.course_page.visit_random_question(self.user_session)
-    #
-    # @task(9)
-    # def answer(self):
-    #     self.course_page.submit_answer_1(self.user_session)
-
-
 class LoginTasks(TaskSet):
     """
-    User scripts that exercise the viewing of course material pages
+    User scripts that tests the login
     """
 
     def __init__(self, *args, **kwargs):
@@ -81,16 +20,13 @@ class LoginTasks(TaskSet):
         self.login_page = LoginPage(self.locust.host, self.client)
         self.dahboard_page = DashboardPage(self.locust.host, self.client)
 
-    def on_start(self):
-        self.login_page.visit_login_page()
-        self.login_page.login_existing_user()
-
     @task(1)
     def login(self):
         """
         View the pages repeatedly
         """
-        self.dahboard_page.visit_dashboard_page()
+        self.login_page.visit_login_page()
+        self.login_page.login_existing_user()
 
 
 class CourseTasks(TaskSet):
@@ -108,6 +44,10 @@ class CourseTasks(TaskSet):
         self.course_page = CoursePage(self.locust.host, self.client)
 
     def on_start(self):
+        """
+        Login and start exam
+        :return:
+        """
         user_email = USER_EMAILS.pop()
         self.login_page.visit_login_page()
         self.login_page.login_new_user(user_email)
@@ -115,25 +55,44 @@ class CourseTasks(TaskSet):
 
     @task(1)
     def dashboard_page(self):
+        """
+        Visit dashboard page
+        """
         self.dahboard_page.visit_dashboard_page()
 
     @task(1)
     def course_main_page(self):
+        """
+        Visit course page
+        """
         self.course_page.visit_course_main_page()
 
     @task(1)
     def exam_main_page(self):
+        """
+        Visit exam page
+        """
         self.course_page.visit_exam_main_page()
 
     @task(8)
     def question_page(self):
+        """
+        Visit question page
+        """
         for q_id in QUESTIONS_ID:
             self.course_page.visit_random_question(q_id)
 
     @task(20)
     def answer(self):
+        """
+        Submit answer
+        """
         for key in PROBLEM_DATA:
-            self.course_page.submit_answer_1(PROBLEM_DATA[key]['block_id'], PROBLEM_DATA[key]['input_id'], PROBLEM_DATA[key]['choice_id'])
+            self.course_page.submit_answer_1(
+                PROBLEM_DATA[key]['block_id'],
+                PROBLEM_DATA[key]['input_id'],
+                PROBLEM_DATA[key]['choice_id']
+            )
 
 
 class RegistrationTasks(TaskSet):
@@ -156,14 +115,10 @@ class RegistrationTasks(TaskSet):
         """
         Visit Registration page
         """
-        registration_page_cookies = \
-            self.registration_page.visit_registration_page()
-        registration_info = self.registration_page.register_new_user(
-            registration_page_cookies
-        )
-        registration_cookies = registration_info.session
-        self.registration_page.visit_survey_page(registration_cookies)
-        self.registration_page.submit_survey(registration_cookies)
+        self.registration_page.visit_registration_page()
+        self.registration_page.register_new_user()
+        self.registration_page.visit_survey_page()
+        self.registration_page.submit_survey()
 
 
 class LogistrationTasks(TaskSet):
@@ -182,28 +137,29 @@ class LogistrationTasks(TaskSet):
         )
         self.login_page = LoginPage(self.locust.host, self.client)
         self.dahboard_page = DashboardPage(self.locust.host, self.client)
-        self.user_email = None
+
+    def on_start(self):
+        """
+        Create a new user
+        """
+        self.registration_page.visit_registration_page()
+        self.user_email = self.registration_page.register_new_user()
+        self.registration_page.visit_survey_page()
+        self.registration_page.submit_survey()
 
     @task(1)
-    def registration(self):
-        """
-        Visit Registration page
-        """
-        registration_page_cookies = \
-            self.registration_page.visit_registration_page()
-        registration_info = self.registration_page.register_new_user(
-            registration_page_cookies
-        )
-        registration_cookies = registration_info.session
-        self.user_email = registration_info.user
-        self.registration_page.visit_survey_page(registration_cookies)
-        self.registration_page.submit_survey(registration_cookies)
-
-    @task(10)
     def login(self):
         """
         View the pages repeatedly
         """
-        response = self.login_page.visit_login_page()
-        login_cookies = self.login_page.login_existing_user(response)
-        self.dahboard_page.visit_dashboard_page(login_cookies)
+        self.login_page.visit_login_page()
+        self.login_page.login_new_user(self.user_email)
+        self.dahboard_page.visit_dashboard_page()
+
+    @task(10)
+    def dashboard_page(self):
+        """
+        View Dashboard page
+        :return:
+        """
+        self.dahboard_page.visit_dashboard_page()
